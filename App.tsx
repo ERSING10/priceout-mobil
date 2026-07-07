@@ -1,20 +1,24 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useEffect } from 'react'
+import { View, Text } from 'react-native'
+import { supabase } from './src/lib/supabase'
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  useEffect(() => {
+    // brands tablosundan 1 kayıt çekmeyi dene, RLS izin veriyor mu test et
+    async function testConnection() {
+      const { data, error } = await supabase.from('brands').select('*').limit(1)
+      if (error) {
+        console.log('HATA:', error.message)
+      } else {
+        console.log('BAŞARILI:', data)
+      }
+    }
+    testConnection()
+  }, [])
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Supabase test ediliyor, terminale bak</Text>
+    </View>
+  )
+}
