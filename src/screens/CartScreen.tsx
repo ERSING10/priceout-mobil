@@ -59,16 +59,8 @@ export default function CartScreen() {
   return (
     <ScrollView contentContainerStyle={styles.grid}>
       {products.map((product) => (
-        <ProductCard
-          key={product.id}
-          product={product}
-          cardWidth={170}
-          onRemoveFromCart={() => {
-            setProducts(prev => prev.filter(p => p.id !== product.id))
-          }}
-        />
-      ))
-      }
+        <ProductCard key={product.id} product={product} cardWidth={170} fromCart={true} />
+      ))}
     </ScrollView>
   )
 }
