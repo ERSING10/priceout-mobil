@@ -23,9 +23,9 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Brands" component={BrandsStackNavigator} options={{ headerShown: false }} />
-        <Tab.Screen name="Cart" component={CartScreen} />
+        <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Anasayfa' }} />
+        <Tab.Screen name="Brands" component={BrandsStackNavigator} options={{ headerShown: false, title: 'Markalar' }} />
+        <Tab.Screen name="Cart" component={CartScreen} options={{ title: 'Sepet' }} />
       </Tab.Navigator>
     </NavigationContainer>
   )
