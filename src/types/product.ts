@@ -12,6 +12,8 @@ export type Product = {
   is_featured: boolean
   size: number
   gender: 'unisex' | 'erkek' | 'kadin' | 'cocuk'
+  stock_count: number | null
+  deal_ends_at: string | null
 }
 
 export type Brand = {

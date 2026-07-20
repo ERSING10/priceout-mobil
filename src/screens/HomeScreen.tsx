@@ -1,45 +1,53 @@
 import { useEffect, useState } from 'react'
-import { View, ActivityIndicator, StyleSheet } from 'react-native'
+import { View, ActivityIndicator, StyleSheet, ScrollView } from 'react-native'
 import { supabase } from '../lib/supabase'
 import { Product } from '../types/product'
+import SearchBar from '../components/SearchBar'
+import CategoryBar from '../components/CategoryBar'
 import ProductList from '../components/ProductList'
 
 export default function HomeScreen() {
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
+  const [allProducts, setAllProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedCategory, setSelectedCategory] = useState('')
 
-    const[products, setProducts] = useState<Product[]>([]) // ürünleri tutan liste
-    const[loading, setLoading] = useState(true) // veri gelene kadar true
+  useEffect(() => {
+    fetchData()
+  }, [])
 
-    useEffect(() => {
-        fetchFeaturedProducts()
-    }, [])
+  async function fetchData() {
+    const { data: featured } = await supabase.from('products').select('*').eq('is_featured', true)
+    const { data: all } = await supabase.from('products').select('*')
 
-    async function fetchFeaturedProducts() {
-        const { data, error } = await supabase
-            .from('products')
-            .select('*')
-            .eq('is_featured',true) //sadece öne cıkanlar
+    if (featured) setFeaturedProducts(featured)
+    if (all) setAllProducts(all)
+    setLoading(false)
+  }
 
-        if (error){
-            console.log('HATA:', error.message)
-        }
-        else
-            setProducts(data)
+  // kategori seçiliyse tüm ürünler içinden o kategori, seçili değilse öne çıkanlar
+  const displayedProducts = selectedCategory === ''
+    ? featuredProducts
+    : allProducts.filter((p) => p.category === selectedCategory)
 
-        setLoading(false) // veri geldi || hata cıktı durumları icin false yapılır
+  if (loading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
 
-    }
-
-    if(loading){
-        return (
-            <View style={styles.centered}>
-                 <ActivityIndicator size="large" />
-            </View>
-        )
-    }
-
-    return <ProductList products={products} />
+  return (
+    <ScrollView style={styles.container}>
+      <SearchBar />
+      <CategoryBar selectedCategory={selectedCategory} onSelect={setSelectedCategory} />
+      <ProductList products={displayedProducts} />
+    </ScrollView>
+  )
 }
 
 const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#fff' },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 })

@@ -11,7 +11,7 @@ export async function getCartIds(): Promise<string[]> {
 // Sepete ürün ekler
 export async function addToCart(productId: string) {
   const ids = await getCartIds()
-  if (ids.includes(productId)) return // zaten ekliyse tekrar ekleme
+  if (ids.includes(productId)) return
   const updated = [...ids, productId]
   await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
 }

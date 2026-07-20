@@ -2,19 +2,20 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from '../screens/HomeScreen'
+import DiscoverScreen from '../screens/DiscoverScreen'
 import BrandsListScreen from '../screens/BrandsListScreen'
 import BrandProductsScreen from '../screens/BrandProductsScreen'
 import CartScreen from '../screens/CartScreen'
 import ProductDetailScreen from '../screens/ProductDetailScreen'
 import ProductWebViewScreen from '../screens/ProductWebViewScreen'
+import { Ionicons } from '@expo/vector-icons'
 
 const Tab = createBottomTabNavigator()
 const HomeStack = createNativeStackNavigator()
+const DiscoverStack = createNativeStackNavigator()
 const BrandsStack = createNativeStackNavigator()
 const CartStack = createNativeStackNavigator()
 
-// Her stack'te ortak olan iki ekran: Detay ve WebView
-// Bunu tekrar yazmamak için küçük bir fonksiyon yapıyoruz
 function addSharedScreens(Stack: any) {
   return (
     <>
@@ -30,6 +31,15 @@ function HomeStackNavigator() {
       <HomeStack.Screen name="HomeMain" component={HomeScreen} options={{ title: 'Anasayfa' }} />
       {addSharedScreens(HomeStack)}
     </HomeStack.Navigator>
+  )
+}
+
+function DiscoverStackNavigator() {
+  return (
+    <DiscoverStack.Navigator>
+      <DiscoverStack.Screen name="DiscoverMain" component={DiscoverScreen} options={{ headerShown: false }} />
+      {addSharedScreens(DiscoverStack)}
+    </DiscoverStack.Navigator>
   )
 }
 
@@ -56,9 +66,42 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeStackNavigator} options={{ headerShown: false, title: 'Anasayfa' }} />
-        <Tab.Screen name="Brands" component={BrandsStackNavigator} options={{ headerShown: false, title: 'Markalar' }} />
-        <Tab.Screen name="Cart" component={CartStackNavigator} options={{ headerShown: false, title: 'Sepetim' }} />
+        <Tab.Screen
+          name="Home"
+          component={HomeStackNavigator}
+          options={{
+            headerShown: false,
+            title: 'Anasayfa',
+            tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" size={size} color={color} />,
+          }}
+        />
+        <Tab.Screen
+          name="Discover"
+          component={DiscoverStackNavigator}
+          options={{
+            headerShown: false,
+            title: 'Keşfet',
+            tabBarIcon: ({ color, size }) => <Ionicons name="compass-outline" size={size} color={color} />,
+          }}
+        />
+        <Tab.Screen
+          name="Brands"
+          component={BrandsStackNavigator}
+          options={{
+            headerShown: false,
+            title: 'Markalar',
+            tabBarIcon: ({ color, size }) => <Ionicons name="pricetags-outline" size={size} color={color} />,
+          }}
+        />
+        <Tab.Screen
+          name="Cart"
+          component={CartStackNavigator}
+          options={{
+            headerShown: false,
+            title: 'Sepetim',
+            tabBarIcon: ({ color, size }) => <Ionicons name="cart-outline" size={size} color={color} />,
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   )
