@@ -1,12 +1,19 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
 
 export default function SearchBar() {
+  const navigation = useNavigation<any>()
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => navigation.navigate('Search')}
+      activeOpacity={0.7}
+    >
       <Ionicons name="search" size={18} color="#888" />
       <Text style={styles.placeholder}>Ürün, kategori veya marka ara</Text>
-    </View>
+    </TouchableOpacity>
   )
 }
 

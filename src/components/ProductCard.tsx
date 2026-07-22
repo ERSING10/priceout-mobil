@@ -10,7 +10,11 @@ type Props = {
 
 export default function ProductCard({ product, cardWidth, fromCart }: Props) {
   const navigation = useNavigation<any>()
-  const imageHeight = cardWidth
+  const imageHeight = cardWidth * (0.6 + (product.size / 100) * 1.0)
+  const scale = cardWidth / 160 
+  const titleSize = 12 * scale
+  const priceSize = 14 * scale
+  const oldPriceSize = 11 * scale
 
   return (
     <TouchableOpacity
@@ -37,12 +41,12 @@ export default function ProductCard({ product, cardWidth, fromCart }: Props) {
         </View>
       )}
 
-      <Text style={styles.title} numberOfLines={1}>{product.title}</Text>
+      <Text style={[styles.title, { fontSize: titleSize }]} numberOfLines={1}>{product.title}</Text>
 
       <View style={styles.priceRow}>
-        <Text style={styles.newPrice}>{product.discounted_price} ₺</Text>
+        <Text style={[styles.newPrice, { fontSize: priceSize }]}>{product.discounted_price} ₺</Text>
         {product.original_price > product.discounted_price && (
-          <Text style={styles.oldPrice}>{product.original_price} ₺</Text>
+          <Text style={[styles.oldPrice, { fontSize: oldPriceSize }]}>{product.original_price} ₺</Text>
         )}
       </View>
     </TouchableOpacity>
@@ -51,7 +55,15 @@ export default function ProductCard({ product, cardWidth, fromCart }: Props) {
 
 const styles = StyleSheet.create({
   card: { marginBottom: 16 },
-  imageWrapper: { borderRadius: 10, overflow: 'hidden' },
+  imageWrapper: {
+    borderRadius: 10,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
+  },
   image: { width: '100%' },
   placeholder: { backgroundColor: '#f0f0f0', justifyContent: 'center', alignItems: 'center' },
   placeholderText: { fontSize: 11, color: '#999' },
@@ -66,9 +78,9 @@ const styles = StyleSheet.create({
   },
   discountStripText: { color: '#fff', fontSize: 10, fontWeight: '700' },
 
-  title: { fontSize: 12, color: '#333', marginTop: 4 },
+  title: { color: '#333', marginTop: 4 },
 
   priceRow: { flexDirection: 'row', alignItems: 'baseline', gap: 5, marginTop: 3 },
-  newPrice: { fontSize: 14, fontWeight: '800', color: '#111' },
-  oldPrice: { fontSize: 11, color: '#aaa', textDecorationLine: 'line-through' },
+  newPrice: { fontWeight: '800', color: '#111' },
+  oldPrice: { color: '#aaa', textDecorationLine: 'line-through' },
 })

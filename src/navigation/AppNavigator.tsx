@@ -9,6 +9,7 @@ import CartScreen from '../screens/CartScreen'
 import ProductDetailScreen from '../screens/ProductDetailScreen'
 import ProductWebViewScreen from '../screens/ProductWebViewScreen'
 import { Ionicons } from '@expo/vector-icons'
+import SearchScreen from '../screens/SearchScreen'
 
 const Tab = createBottomTabNavigator()
 const HomeStack = createNativeStackNavigator()
@@ -21,6 +22,7 @@ function addSharedScreens(Stack: any) {
     <>
       <Stack.Screen name="ProductDetail" component={ProductDetailScreen} options={{ title: '' }} />
       <Stack.Screen name="ProductWebView" component={ProductWebViewScreen} options={{ title: '' }} />
+      <Stack.Screen name="Search" component={SearchScreen} options={{ title: 'Ürün Ara' }} />
     </>
   )
 }

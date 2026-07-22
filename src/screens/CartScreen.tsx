@@ -5,10 +5,13 @@ import { supabase } from '../lib/supabase'
 import { Product } from '../types/product'
 import { getCartIds } from '../lib/favorites'
 import ProductCard from '../components/ProductCard'
+import EmptyState from '../components/EmptyState'
+import { useNavigation } from '@react-navigation/native'
 
 export default function CartScreen() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const navigation = useNavigation<any>()
 
   // ekran her odaklandığında (sepete girildiğinde) listeyi tazele
   useFocusEffect(
@@ -50,10 +53,14 @@ export default function CartScreen() {
 
   if (products.length === 0) {
     return (
-      <View style={styles.centered}>
-        <Text style={styles.emptyText}>Sepetin boş</Text>
-      </View>
-    )
+      <EmptyState
+        icon="cart-outline"
+        title="Sepetin boş"
+        subtitle="Beğendiğin ürünleri sepete ekleyip burada takip edebilirsin"
+        buttonText="Keşfet'e Git"
+        onButtonPress={() => navigation.getParent()?.navigate('Discover')}
+      />
+   )
   }
 
   return (

@@ -35,8 +35,8 @@ export default function DiscoverCard({ product, brandName, brandLogo }: Props) {
     return `${hours}s ${minutes}dk`
   }
 
-  const savings = product.original_price - product.discounted_price
-
+  const savings = Math.round(product.original_price - product.discounted_price)
+  
   return (
     <View style={styles.page}>
       <TouchableOpacity

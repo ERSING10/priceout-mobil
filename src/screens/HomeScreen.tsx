@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { View, ActivityIndicator, StyleSheet, ScrollView } from 'react-native'
+import { View, StyleSheet, ScrollView } from 'react-native'
 import { supabase } from '../lib/supabase'
 import { Product } from '../types/product'
 import SearchBar from '../components/SearchBar'
 import CategoryBar from '../components/CategoryBar'
 import ProductList from '../components/ProductList'
+import SkeletonGrid from '../components/SkeletonGrid'
 
 export default function HomeScreen() {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
@@ -32,9 +33,11 @@ export default function HomeScreen() {
 
   if (loading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" />
-      </View>
+      <ScrollView style={styles.container}>
+        <SearchBar />
+        <CategoryBar selectedCategory={selectedCategory} onSelect={setSelectedCategory} />
+        <SkeletonGrid />
+      </ScrollView>
     )
   }
 
