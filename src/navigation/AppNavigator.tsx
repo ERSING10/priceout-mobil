@@ -27,7 +27,13 @@ function addSharedScreens(Stack: any) {
 
 function HomeStackNavigator() {
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator
+      screenOptions={{
+        headerTitleStyle: { fontSize: 22, fontWeight: '800', color: '#1a1625' },
+        headerShadowVisible: false, // header altındaki gri çizgiyi kaldırır
+        headerStyle: { backgroundColor: '#fff' },
+      }}
+    >
       <HomeStack.Screen name="HomeMain" component={HomeScreen} options={{ title: 'Anasayfa' }} />
       {addSharedScreens(HomeStack)}
     </HomeStack.Navigator>
@@ -45,7 +51,13 @@ function DiscoverStackNavigator() {
 
 function BrandsStackNavigator() {
   return (
-    <BrandsStack.Navigator>
+    <BrandsStack.Navigator
+      screenOptions={{
+        headerTitleStyle: { fontSize: 22, fontWeight: '800', color: '#1a1625' },
+        headerShadowVisible: false,
+        headerStyle: { backgroundColor: '#fff' },
+      }}
+    >
       <BrandsStack.Screen name="BrandsList" component={BrandsListScreen} options={{ title: 'Markalar' }} />
       <BrandsStack.Screen name="BrandProducts" component={BrandProductsScreen} options={{ title: '' }} />
       {addSharedScreens(BrandsStack)}
@@ -55,7 +67,13 @@ function BrandsStackNavigator() {
 
 function CartStackNavigator() {
   return (
-    <CartStack.Navigator>
+    <CartStack.Navigator
+      screenOptions={{
+        headerTitleStyle: { fontSize: 22, fontWeight: '800', color: '#1a1625' },
+        headerShadowVisible: false,
+        headerStyle: { backgroundColor: '#fff' },
+      }}
+    >
       <CartStack.Screen name="CartMain" component={CartScreen} options={{ title: 'Sepetim' }} />
       {addSharedScreens(CartStack)}
     </CartStack.Navigator>

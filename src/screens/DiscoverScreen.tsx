@@ -61,10 +61,12 @@ export default function DiscoverScreen() {
             brandLogo={brands[item.brand_id]?.logo_url ?? null}
           />
         )}
-        pagingEnabled // her kaydırmada tam bir sonraki karta gecer
+        pagingEnabled
+        disableIntervalMomentum // her kaydırmada sadece 1 adım ilerlemeyi zorunlu kılar
         showsVerticalScrollIndicator={false}
         snapToInterval={height}
         decelerationRate="fast"
+        getItemLayout={(_, index) => ({ length: height, offset: height * index, index })} // her elemanın tam konumunu önceden bildirir
       />
 
       <View style={styles.filterBar}>

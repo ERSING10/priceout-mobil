@@ -1,39 +1,53 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native'
 import { Brand } from '../types/product'
 
 type Props = {
   brand: Brand
-  onPress: () => void // tıklanınca ne olacağını dışarıdan alıyoruz
+  onPress: () => void
 }
 
 export default function BrandCard({ brand, onPress }: Props) {
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
-      {brand.logo_url ? (
-        <Image source={{ uri: brand.logo_url }} style={styles.logo} />
-      ) : (
-        <View style={[styles.logo, styles.placeholder]}>
-          <Text style={styles.placeholderText}>{brand.name[0]}</Text>
-        </View>
-      )}
-      <Text style={styles.name}>{brand.name}</Text>
-    </TouchableOpacity>
+    <Pressable
+      style={({ pressed }) => [styles.container, pressed && styles.pressed]}
+      onPress={onPress}
+    >
+      <View style={styles.logoWrapper}>
+        {brand.logo_url ? (
+          <Image source={{ uri: brand.logo_url }} style={styles.logo} resizeMode="contain" />
+        ) : (
+          <View style={[styles.logo, styles.placeholder]}>
+            <Text style={styles.placeholderText}>{brand.name[0].toUpperCase()}</Text>
+          </View>
+        )}
+      </View>
+      <Text style={styles.name} numberOfLines={1}>{brand.name}</Text>
+    </Pressable>
   )
 }
 
 const styles = StyleSheet.create({
-  card: {
-    width: '47%',
+  container: { width: '23%', alignItems: 'center', marginBottom: 20 },
+  pressed: { opacity: 0.6, transform: [{ scale: 0.94 }] },
+
+  logoWrapper: {
+    width: 68,
+    height: 68,
+    borderRadius: 34,
     backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 16,
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: '#eee',
+    marginBottom: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
+    overflow: 'hidden',
   },
-  logo: { width: 64, height: 64, borderRadius: 32, marginBottom: 8 },
-  placeholder: { backgroundColor: '#f0f0f0', justifyContent: 'center', alignItems: 'center' },
-  placeholderText: { fontSize: 24, fontWeight: '700', color: '#999' },
-  name: { fontWeight: '600', fontSize: 14, textAlign: 'center' },
+  logo: { width: 44, height: 44 },
+  placeholder: { backgroundColor: '#eee', justifyContent: 'center', alignItems: 'center' },
+  placeholderText: { fontSize: 20, fontWeight: '700', color: '#999' },
+
+  name: { fontSize: 12, fontWeight: '600', color: '#333', textAlign: 'center' },
 })
