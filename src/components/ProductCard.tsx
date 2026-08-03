@@ -10,7 +10,9 @@ type Props = {
 
 export default function ProductCard({ product, cardWidth, fromCart }: Props) {
   const navigation = useNavigation<any>()
-  const imageHeight = cardWidth * (0.6 + (product.size / 100) * 1.0)
+  const imageHeight = product.category === 'Ayakkabı'
+    ? cardWidth
+    : cardWidth * 1.35
   const scale = cardWidth / 160 
   const titleSize = 12 * scale
   const priceSize = 14 * scale

@@ -8,7 +8,6 @@ import ProductList from '../components/ProductList'
 import SkeletonGrid from '../components/SkeletonGrid'
 
 export default function HomeScreen() {
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
   const [allProducts, setAllProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState('')
@@ -18,17 +17,18 @@ export default function HomeScreen() {
   }, [])
 
   async function fetchData() {
-    const { data: featured } = await supabase.from('products').select('*').eq('is_featured', true)
-    const { data: all } = await supabase.from('products').select('*')
+    const { data: all } = await supabase
+      .from('products')
+      .select('*')
+      .order('created_at', { ascending: false }) // en yeni en üstte
 
-    if (featured) setFeaturedProducts(featured)
     if (all) setAllProducts(all)
     setLoading(false)
   }
 
   // kategori seçiliyse tüm ürünler içinden o kategori, seçili değilse öne çıkanlar
   const displayedProducts = selectedCategory === ''
-    ? featuredProducts
+    ? allProducts
     : allProducts.filter((p) => p.category === selectedCategory)
 
   if (loading) {

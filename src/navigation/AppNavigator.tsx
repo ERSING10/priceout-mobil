@@ -36,7 +36,7 @@ function HomeStackNavigator() {
         headerStyle: { backgroundColor: '#fff' },
       }}
     >
-      <HomeStack.Screen name="HomeMain" component={HomeScreen} options={{ title: 'Anasayfa' }} />
+      <HomeStack.Screen name="HomeMain" component={HomeScreen} options={{ title: 'Yeni Ürünler' }} />
       {addSharedScreens(HomeStack)}
     </HomeStack.Navigator>
   )
@@ -91,7 +91,7 @@ export default function AppNavigator() {
           component={HomeStackNavigator}
           options={{
             headerShown: false,
-            title: 'Anasayfa',
+            title: 'Yeni Ürünler',
             tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" size={size} color={color} />,
           }}
         />

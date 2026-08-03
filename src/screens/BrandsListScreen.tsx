@@ -48,5 +48,5 @@ export default function BrandsListScreen() {
 
 const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '3.5%', padding: 16, backgroundColor: '#f5f5f5' },
+  grid: { padding: 16, backgroundColor: '#fafafa' },
 })

@@ -1,18 +1,11 @@
-import { ScrollView, TouchableOpacity, Text, StyleSheet } from 'react-native'
+import { ScrollView, TouchableOpacity, Text, View, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
-// her kategori için isim + ikon eşleşmesi
 const CATEGORIES: { name: string; icon: keyof typeof Ionicons.glyphMap }[] = [
-  { name: 'Ayakkabı', icon: 'footsteps-outline' },
-  { name: 'Çanta', icon: 'bag-handle-outline' },
   { name: 'Giyim', icon: 'shirt-outline' },
+  { name: 'Ayakkabı', icon: 'footsteps-outline' },
   { name: 'Aksesuar', icon: 'glasses-outline' },
-  { name: 'Saat', icon: 'watch-outline' },
-  { name: 'Elektronik', icon: 'phone-portrait-outline' },
-  { name: 'Spor', icon: 'basketball-outline' },
-  { name: 'Kozmetik', icon: 'color-palette-outline' },
-  { name: 'Ev & Yaşam', icon: 'home-outline' },
-  { name: 'Diğer', icon: 'ellipsis-horizontal-outline' },
+  { name: 'Outlet', icon: 'flash-outline' },
 ]
 
 type Props = {
@@ -60,7 +53,7 @@ const styles = StyleSheet.create({
     padding: 6,
     gap: 4,
   },
-  boxActive: { backgroundColor: '#111' },
+  boxActive: { backgroundColor: '#1a1625' },
   boxText: { fontSize: 10, fontWeight: '600', color: '#555', textAlign: 'center' },
   boxTextActive: { color: '#fff' },
 })
