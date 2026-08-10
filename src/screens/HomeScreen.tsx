@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { View, StyleSheet, ScrollView } from 'react-native'
+import { View, ActivityIndicator, StyleSheet, ScrollView, Text } from 'react-native'
 import { supabase } from '../lib/supabase'
 import { Product } from '../types/product'
 import SearchBar from '../components/SearchBar'
 import CategoryBar from '../components/CategoryBar'
 import ProductList from '../components/ProductList'
-import SkeletonGrid from '../components/SkeletonGrid'
+import SplitCategoryGrid from '../components/SplitCategoryGrid'
 
 export default function HomeScreen() {
   const [allProducts, setAllProducts] = useState<Product[]>([])
@@ -20,23 +20,20 @@ export default function HomeScreen() {
     const { data: all } = await supabase
       .from('products')
       .select('*')
-      .order('created_at', { ascending: false }) // en yeni en üstte
+      .order('created_at', { ascending: false })
 
     if (all) setAllProducts(all)
     setLoading(false)
   }
-
-  // kategori seçiliyse tüm ürünler içinden o kategori, seçili değilse öne çıkanlar
-  const displayedProducts = selectedCategory === ''
-    ? allProducts
-    : allProducts.filter((p) => p.category === selectedCategory)
 
   if (loading) {
     return (
       <ScrollView style={styles.container}>
         <SearchBar />
         <CategoryBar selectedCategory={selectedCategory} onSelect={setSelectedCategory} />
-        <SkeletonGrid />
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" />
+        </View>
       </ScrollView>
     )
   }
@@ -45,12 +42,20 @@ export default function HomeScreen() {
     <ScrollView style={styles.container}>
       <SearchBar />
       <CategoryBar selectedCategory={selectedCategory} onSelect={setSelectedCategory} />
-      <ProductList products={displayedProducts} />
+
+      {selectedCategory === '' ? (
+        <SplitCategoryGrid
+          shoes={allProducts.filter((p) => p.category === 'Ayakkabı')}
+          clothes={allProducts.filter((p) => p.category === 'Giyim')}
+        />
+      ) : (
+        <ProductList products={allProducts.filter((p) => p.category === selectedCategory)} />
+      )}
     </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  centered: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 40 },
 })

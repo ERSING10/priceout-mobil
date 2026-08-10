@@ -5,13 +5,13 @@ import { Product, Brand } from '../types/product'
 import DiscoverCard from '../components/DiscoverCard'
 
 const { height } = Dimensions.get('window')
-const GENDER_FILTERS = ['Tümü', 'Kadın', 'Erkek', 'Unisex'] 
+const GENDER_FILTERS = ['Kadın', 'Erkek'] 
 
 export default function DiscoverScreen() {
   const [products, setProducts] = useState<Product[]>([])
   const [brands, setBrands] = useState<Record<string, Brand>>({}) // id'ye göre hızlı erişim için obje
   const [loading, setLoading] = useState(true)
-  const [selectedGender, setSelectedGender] = useState('Tümü')
+  const [selectedGender, setSelectedGender] = useState('Erkek')
 
   useEffect(() => {
     fetchData()
@@ -34,10 +34,8 @@ export default function DiscoverScreen() {
   }
 
   const filteredProducts = products.filter((p) => {
-    if (selectedGender === 'Tümü') return true
     if (selectedGender === 'Kadın') return p.gender === 'kadin'
     if (selectedGender === 'Erkek') return p.gender === 'erkek'
-    if (selectedGender === 'Unisex') return p.gender === 'unisex'
     return true
   })
 
@@ -61,12 +59,8 @@ export default function DiscoverScreen() {
             brandLogo={brands[item.brand_id]?.logo_url ?? null}
           />
         )}
-        pagingEnabled
-        disableIntervalMomentum // her kaydırmada sadece 1 adım ilerlemeyi zorunlu kılar
         showsVerticalScrollIndicator={false}
-        snapToInterval={height}
-        decelerationRate="fast"
-        getItemLayout={(_, index) => ({ length: height, offset: height * index, index })} // her elemanın tam konumunu önceden bildirir
+        contentContainerStyle={{ alignItems: 'center', paddingTop: 60 }}
       />
 
       <View style={styles.filterBar}>
@@ -85,7 +79,7 @@ export default function DiscoverScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#000' },
+  container: { flex: 1, backgroundColor: '#ffff' },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' },
   filterBar: {
     position: 'absolute',
