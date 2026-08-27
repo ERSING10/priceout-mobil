@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { View, ScrollView, ActivityIndicator, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { supabase } from '../lib/supabase'
 import { Brand } from '../types/product'
@@ -8,7 +8,8 @@ import BrandCard from '../components/BrandCard'
 export default function BrandsListScreen() {
   const [brands, setBrands] = useState<Brand[]>([])
   const [loading, setLoading] = useState(true)
-  const navigation = useNavigation<any>() // ekranlar arası geçiş için
+  const [error, setError] = useState('')
+  const navigation = useNavigation<any>()
 
   useEffect(() => {
     fetchBrands()
@@ -18,7 +19,7 @@ export default function BrandsListScreen() {
     const { data, error } = await supabase.from('brands').select('*').order('name')
 
     if (error) {
-      console.log('HATA:', error.message)
+      setError('Markalar yüklenemedi, internet bağlantını kontrol et')
     } else {
       setBrands(data)
     }
@@ -29,6 +30,14 @@ export default function BrandsListScreen() {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" />
+      </View>
+    )
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>{error}</Text>
       </View>
     )
   }
@@ -48,5 +57,6 @@ export default function BrandsListScreen() {
 
 const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  errorText: { color: '#999', fontSize: 14, textAlign: 'center', paddingHorizontal: 32 },
   grid: { padding: 16, backgroundColor: '#fafafa' },
 })

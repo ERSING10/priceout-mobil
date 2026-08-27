@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { View, TextInput, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
@@ -14,9 +14,19 @@ export default function SearchScreen() {
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false) // en az bir kere arama yapıldı mı
 
-  async function handleSearch(text: string) {
-    setSearchText(text)
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    performSearch(searchText)
+  }, 400) // kullanıcı 400ms yazmayı durdurursa arama tetiklenir
 
+    return () => clearTimeout(timer) // her yeni harfte, önceki zamanlayıcı iptal edilir
+  }, [searchText])
+
+  function handleSearch(text: string) {
+    setSearchText(text)
+  }
+
+  async function performSearch(text: string) {
     if (text.trim() === '') {
       setResults([])
       setSearched(false)
@@ -29,7 +39,7 @@ export default function SearchScreen() {
     const { data, error } = await supabase
       .from('products')
       .select('*')
-      .ilike('title', `%${text}%`) // başlıkta bu kelimeyi içeren ürünler
+      .ilike('title', `%${text}%`)
 
     if (error) {
       console.log('HATA:', error.message)

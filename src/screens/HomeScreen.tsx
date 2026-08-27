@@ -10,6 +10,7 @@ import SplitCategoryGrid from '../components/SplitCategoryGrid'
 export default function HomeScreen() {
   const [allProducts, setAllProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
 
   useEffect(() => {
@@ -17,12 +18,17 @@ export default function HomeScreen() {
   }, [])
 
   async function fetchData() {
-    const { data: all } = await supabase
+    const { data: all, error } = await supabase
       .from('products')
       .select('*')
       .order('created_at', { ascending: false })
+      .limit(100)
 
-    if (all) setAllProducts(all)
+    if (error) {
+      setError('Ürünler yüklenemedi, internet bağlantını kontrol et')
+    } else if (all) {
+      setAllProducts(all)
+    }
     setLoading(false)
   }
 
@@ -35,6 +41,14 @@ export default function HomeScreen() {
           <ActivityIndicator size="large" />
         </View>
       </ScrollView>
+    )
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>{error}</Text>
+      </View>
     )
   }
 
@@ -58,4 +72,5 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 40 },
+  errorText: { color: '#999', fontSize: 14, textAlign: 'center', paddingHorizontal: 32 },
 })

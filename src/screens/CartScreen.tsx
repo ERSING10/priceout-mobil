@@ -1,19 +1,18 @@
 import { useState, useCallback } from 'react'
 import { View, Text, ScrollView, ActivityIndicator, StyleSheet } from 'react-native'
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { supabase } from '../lib/supabase'
 import { Product } from '../types/product'
-import { getCartIds } from '../lib/favorites'
+import { getCartIds } from '../lib/cart'
 import ProductCard from '../components/ProductCard'
 import EmptyState from '../components/EmptyState'
-import { useNavigation } from '@react-navigation/native'
 
 export default function CartScreen() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const navigation = useNavigation<any>()
 
-  // ekran her odaklandığında (sepete girildiğinde) listeyi tazele
   useFocusEffect(
     useCallback(() => {
       fetchCartProducts()
@@ -22,6 +21,7 @@ export default function CartScreen() {
 
   async function fetchCartProducts() {
     setLoading(true)
+    setError('')
     const ids = await getCartIds()
 
     if (ids.length === 0) {
@@ -33,10 +33,10 @@ export default function CartScreen() {
     const { data, error } = await supabase
       .from('products')
       .select('*')
-      .in('id', ids) // id listesindeki tüm ürünleri getir
+      .in('id', ids)
 
     if (error) {
-      console.log('HATA:', error.message)
+      setError('Ürünler yüklenemedi, internet bağlantını kontrol et')
     } else {
       setProducts(data)
     }
@@ -51,6 +51,14 @@ export default function CartScreen() {
     )
   }
 
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>{error}</Text>
+      </View>
+    )
+  }
+
   if (products.length === 0) {
     return (
       <EmptyState
@@ -60,7 +68,7 @@ export default function CartScreen() {
         buttonText="Keşfet'e Git"
         onButtonPress={() => navigation.getParent()?.navigate('Discover')}
       />
-   )
+    )
   }
 
   return (
@@ -74,6 +82,6 @@ export default function CartScreen() {
 
 const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  emptyText: { color: '#999', fontSize: 15 },
+  errorText: { color: '#999', fontSize: 14, textAlign: 'center', paddingHorizontal: 32 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', padding: 12 },
 })

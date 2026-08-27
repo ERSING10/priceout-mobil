@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity } from 'rea
 import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 import { Product } from '../types/product'
-import { getCartIds, addToCart, removeFromCart } from '../lib/favorites'
+import { getCartIds, addToCart, removeFromCart } from '../lib/cart'
 
 const { width } = Dimensions.get('window')
 

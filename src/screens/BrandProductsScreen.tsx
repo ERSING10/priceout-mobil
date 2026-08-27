@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { View, ScrollView, ActivityIndicator, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator, StyleSheet } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 import { supabase } from '../lib/supabase'
 import { Product } from '../types/product'
@@ -13,6 +13,7 @@ export default function BrandProductsScreen() {
 
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export default function BrandProductsScreen() {
       .eq('brand_id', brandId)
 
     if (error) {
-      console.log('HATA:', error.message)
+      setError('Ürünler yüklenemedi, internet bağlantını kontrol et')
     } else {
       setProducts(data)
     }
@@ -41,6 +42,14 @@ export default function BrandProductsScreen() {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" />
+      </View>
+    )
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>{error}</Text>
       </View>
     )
   }
@@ -65,5 +74,6 @@ export default function BrandProductsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fafafa' },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  errorText: { color: '#999', fontSize: 14, textAlign: 'center', paddingHorizontal: 32 },
   list: { padding: 16 },
 })

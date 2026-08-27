@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { Product } from '../types/product'
-import { getCartIds, addToCart, removeFromCart } from '../lib/favorites'
+import { getCartIds, addToCart, removeFromCart } from '../lib/cart'
 
 export default function ProductDetailScreen() {
   const route = useRoute<any>()

@@ -4,13 +4,13 @@ import { supabase } from '../lib/supabase'
 import { Product, Brand } from '../types/product'
 import DiscoverCard from '../components/DiscoverCard'
 
-const { height } = Dimensions.get('window')
-const GENDER_FILTERS = ['Kadın', 'Erkek'] 
+const GENDER_FILTERS = ['Kadın', 'Erkek']
 
 export default function DiscoverScreen() {
   const [products, setProducts] = useState<Product[]>([])
-  const [brands, setBrands] = useState<Record<string, Brand>>({}) // id'ye göre hızlı erişim için obje
+  const [brands, setBrands] = useState<Record<string, Brand>>({})
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const [selectedGender, setSelectedGender] = useState('Erkek')
 
   useEffect(() => {
@@ -18,13 +18,22 @@ export default function DiscoverScreen() {
   }, [])
 
   async function fetchData() {
-    const { data: productsData } = await supabase.from('products').select('*')
-    const { data: brandsData } = await supabase.from('brands').select('*')
+    const { data: productsData, error: productsError } = await supabase
+      .from('products')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(100)
+    const { data: brandsData, error: brandsError } = await supabase.from('brands').select('*')
+
+    if (productsError || brandsError) {
+      setError('Ürünler yüklenemedi, internet bağlantını kontrol et')
+      setLoading(false)
+      return
+    }
 
     if (productsData) setProducts(productsData)
 
     if (brandsData) {
-      // dizi -> id ile erişilebilen obje (her ürün için marka aramayı hızlandırmak için)
       const brandsMap: Record<string, Brand> = {}
       brandsData.forEach((b) => { brandsMap[b.id] = b })
       setBrands(brandsMap)
@@ -42,7 +51,15 @@ export default function DiscoverScreen() {
   if (loading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#fff" />
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>{error}</Text>
       </View>
     )
   }
@@ -79,8 +96,9 @@ export default function DiscoverScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#ffff' },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' },
+  container: { flex: 1, backgroundColor: '#fff' },
+  centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' },
+  errorText: { color: '#999', fontSize: 14, textAlign: 'center', paddingHorizontal: 32 },
   filterBar: {
     position: 'absolute',
     top: 50,
