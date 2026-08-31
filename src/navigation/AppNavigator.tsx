@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { View, TouchableOpacity } from 'react-native'
 import HomeScreen from '../screens/HomeScreen'
 import DiscoverScreen from '../screens/DiscoverScreen'
 import BrandsListScreen from '../screens/BrandsListScreen'
@@ -8,8 +9,15 @@ import BrandProductsScreen from '../screens/BrandProductsScreen'
 import CartScreen from '../screens/CartScreen'
 import ProductDetailScreen from '../screens/ProductDetailScreen'
 import ProductWebViewScreen from '../screens/ProductWebViewScreen'
-import { Ionicons } from '@expo/vector-icons'
 import SearchScreen from '../screens/SearchScreen'
+import AccountScreen from '../screens/AccountScreen'
+import { Ionicons } from '@expo/vector-icons'
+import SignUpScreen from '../screens/SignUpScreen'
+import LoginScreen from '../screens/LoginScreen'
+import ChangePasswordScreen from '../screens/ChangePasswordScreen'
+import PersonalInfoScreen from '../screens/PersonalInfoScreen'
+import ChangeEmailScreen from '../screens/ChangeEmailScreen'
+import ContactSupportScreen from '../screens/ContactSupportScreen'
 
 const Tab = createBottomTabNavigator()
 const HomeStack = createNativeStackNavigator()
@@ -23,7 +31,27 @@ function addSharedScreens(Stack: any) {
       <Stack.Screen name="ProductDetail" component={ProductDetailScreen} options={{ title: '' }} />
       <Stack.Screen name="ProductWebView" component={ProductWebViewScreen} options={{ title: '' }} />
       <Stack.Screen name="Search" component={SearchScreen} options={{ title: 'Ürün Ara' }} />
+      <Stack.Screen name="Account" component={AccountScreen} options={{ title: 'Hesabım' }} />
+      <Stack.Screen name="SignUp" component={SignUpScreen} options={{ title: 'Üye Ol' }} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Giriş Yap' }} />
+      <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ title: 'Şifre Değiştir' }} />
+      <Stack.Screen name="PersonalInfo" component={PersonalInfoScreen} options={{ title: 'Kişisel Bilgilerim' }} />
+      <Stack.Screen name="ChangeEmail" component={ChangeEmailScreen} options={{ title: 'E-Posta Değiştir' }} />
+      <Stack.Screen name="ContactSupport" component={ContactSupportScreen} options={{ title: 'İletişim & Destek' }} />
     </>
+  )
+}
+
+function HeaderIcons({ navigation }: any) {
+  return (
+    <View style={{ flexDirection: 'row', gap: 16, marginRight: 8 }}>
+      <TouchableOpacity onPress={() => navigation.navigate('Account')}>
+        <Ionicons name="person-circle-outline" size={26} color="#1a1625" />
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <Ionicons name="notifications-outline" size={24} color="#1a1625" />
+      </TouchableOpacity>
+    </View>
   )
 }
 
@@ -32,11 +60,18 @@ function HomeStackNavigator() {
     <HomeStack.Navigator
       screenOptions={{
         headerTitleStyle: { fontSize: 22, fontWeight: '800', color: '#1a1625' },
-        headerShadowVisible: false, // header altındaki gri çizgiyi kaldırır
+        headerShadowVisible: false,
         headerStyle: { backgroundColor: '#fff' },
       }}
     >
-      <HomeStack.Screen name="HomeMain" component={HomeScreen} options={{ title: 'Yeni Ürünler' }} />
+      <HomeStack.Screen
+        name="HomeMain"
+        component={HomeScreen}
+        options={({ navigation }) => ({
+          title: 'Yeni Ürünler',
+          headerRight: () => <HeaderIcons navigation={navigation} />,
+        })}
+      />
       {addSharedScreens(HomeStack)}
     </HomeStack.Navigator>
   )
