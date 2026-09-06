@@ -6,17 +6,19 @@ type Props = {
   product: Product
   cardWidth: number
   fromCart?: boolean
+  brandName?: string
 }
 
-export default function ProductCard({ product, cardWidth, fromCart }: Props) {
+export default function ProductCard({ product, cardWidth, fromCart, brandName }: Props) {
   const navigation = useNavigation<any>()
   const imageHeight = product.category === 'Ayakkabı'
     ? cardWidth
     : cardWidth * 1.35
-  const scale = cardWidth / 160 
-  const titleSize = 12 * scale
-  const priceSize = 14 * scale
-  const oldPriceSize = 11 * scale
+  const scale = cardWidth / 160
+  const brandSize = 12 * scale
+  const titleSize = 11 * scale
+  const priceSize = 15 * scale
+  const oldPriceSize = 10 * scale
 
   return (
     <TouchableOpacity
@@ -37,19 +39,25 @@ export default function ProductCard({ product, cardWidth, fromCart }: Props) {
         )}
       </View>
 
-      {product.discount_rate > 0 && (
-        <View style={styles.discountStrip}>
-          <Text style={styles.discountStripText}>%{product.discount_rate} indirim</Text>
+      <View style={styles.bottomRow}>
+        <View style={styles.textCol}>
+          {brandName && <Text style={[styles.brand, { fontSize: brandSize }]}>{brandName}</Text>}
+          <Text style={[styles.title, { fontSize: titleSize }]} numberOfLines={2}>{product.title}</Text>
         </View>
-      )}
 
-      <Text style={[styles.title, { fontSize: titleSize }]} numberOfLines={1}>{product.title}</Text>
-
-      <View style={styles.priceRow}>
-        <Text style={[styles.newPrice, { fontSize: priceSize }]}>{product.discounted_price} ₺</Text>
-        {product.original_price > product.discounted_price && (
-          <Text style={[styles.oldPrice, { fontSize: oldPriceSize }]}>{product.original_price} ₺</Text>
-        )}
+        <View style={styles.priceCol}>
+          <Text style={[styles.newPrice, { fontSize: priceSize }]}>{product.discounted_price} ₺</Text>
+          <View style={styles.discountRow}>
+            {product.discount_rate > 0 && (
+              <View style={styles.discountBadge}>
+                <Text style={styles.discountBadgeText}>%{product.discount_rate}</Text>
+              </View>
+            )}
+            {product.original_price > product.discounted_price && (
+              <Text style={[styles.oldPrice, { fontSize: oldPriceSize }]}>{product.original_price} ₺</Text>
+            )}
+          </View>
+        </View>
       </View>
     </TouchableOpacity>
   )
@@ -70,19 +78,15 @@ const styles = StyleSheet.create({
   placeholder: { backgroundColor: '#f0f0f0', justifyContent: 'center', alignItems: 'center' },
   placeholderText: { fontSize: 11, color: '#999' },
 
-  discountStrip: {
-    backgroundColor: '#dc2626',
-    alignSelf: 'flex-start',
-    borderRadius: 4,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    marginTop: 6,
-  },
-  discountStripText: { color: '#fff', fontSize: 10, fontWeight: '700' },
+  bottomRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginTop: 6 },
+  textCol: { flex: 1, marginRight: 4 },
+  brand: { fontWeight: '800', color: '#111' },
+  title: { color: '#888', marginTop: 2 },
 
-  title: { color: '#333', marginTop: 4 },
-
-  priceRow: { flexDirection: 'row', alignItems: 'baseline', gap: 5, marginTop: 3 },
+  priceCol: { alignItems: 'flex-end' },
   newPrice: { fontWeight: '800', color: '#111' },
-  oldPrice: { color: '#aaa', textDecorationLine: 'line-through' },
+  discountRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 2 },
+  discountBadge: { backgroundColor: '#16a34a', borderRadius: 5, paddingHorizontal: 5, paddingVertical: 1 },
+  discountBadgeText: { color: '#fff', fontSize: 10, fontWeight: '700' },
+  oldPrice: { color: '#dc2626', textDecorationLine: 'line-through' },
 })
