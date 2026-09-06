@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, SafeAreaView, Platform, StatusBar } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { supabase } from '../lib/supabase'
+import ScreenHeader from '../components/ScreenHeader'
 
 export default function LoginScreen() {
   const navigation = useNavigation<any>()
@@ -28,42 +29,46 @@ export default function LoginScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-        placeholder="E-Posta"
-        placeholderTextColor="#999"
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        value={password}
-        onChangeText={setPassword}
-        placeholder="Şifre"
-        placeholderTextColor="#999"
-        secureTextEntry
-      />
+    <SafeAreaView style={styles.safeArea}>
+      <ScreenHeader title="Giriş Yap" />
+      <View style={styles.container}>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          placeholder="E-Posta"
+          placeholderTextColor="#999"
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Şifre"
+          placeholderTextColor="#999"
+          secureTextEntry
+        />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.buttonText}>Giriş Yap</Text>
-        )}
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Giriş Yap</Text>
+          )}
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-        <Text style={styles.linkText}>Hesabın yok mu? <Text style={styles.linkTextBold}>Üye Ol</Text></Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+          <Text style={styles.linkText}>Hesabın yok mu? <Text style={styles.linkTextBold}>Üye Ol</Text></Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', padding: 20, paddingTop: 40 },
+  safeArea: { flex: 1, backgroundColor: '#fff', paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
+  container: { flex: 1, backgroundColor: '#fff', padding: 20, paddingTop: 10 },
   input: { backgroundColor: '#f5f5f5', borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12, fontSize: 14, marginBottom: 10, color: '#111' },
   button: { backgroundColor: '#16a34a', borderRadius: 10, paddingVertical: 14, alignItems: 'center', marginTop: 16 },
   buttonText: { color: '#fff', fontWeight: '700', fontSize: 15 },

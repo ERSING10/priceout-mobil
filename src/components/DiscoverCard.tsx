@@ -19,7 +19,7 @@ export default function DiscoverCard({ product, brandName }: Props) {
   return (
     <TouchableOpacity
       activeOpacity={0.9}
-      onPress={() => navigation.navigate('ProductDetail', { product })}
+      onPress={() => navigation.navigate('ProductDetail', { product, brandName })}
       style={styles.cardContainer}
     >
       <View style={styles.imageWrapper}>

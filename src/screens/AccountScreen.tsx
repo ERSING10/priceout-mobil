@@ -1,8 +1,9 @@
 import { useState, useCallback } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, SafeAreaView, Platform, StatusBar } from 'react-native'
 import { useNavigation, useFocusEffect, NavigationProp, ParamListBase } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 import { supabase } from '../lib/supabase'
+import ScreenHeader from '../components/ScreenHeader'
 
 type Profile = {
   full_name: string | null
@@ -48,43 +49,49 @@ export default function AccountScreen() {
 
   if (loading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#16a34a" />
-      </View>
+      <SafeAreaView style={styles.safeArea}>
+        <ScreenHeader title="Hesabım" />
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" color="#16a34a" />
+        </View>
+      </SafeAreaView>
     )
   }
 
   // MİSAFİR MODU
   if (!profile) {
     return (
-      <View style={styles.guestContainer}>
-        <View style={styles.avatarWrapper}>
-          <Ionicons name="person" size={54} color="#aaa" />
-        </View>
-        <Text style={styles.guestText}>Misafir Kullanıcı</Text>
+      <SafeAreaView style={styles.safeArea}>
+        <ScreenHeader title="Hesabım" />
+        <View style={styles.guestContainer}>
+          <View style={styles.avatarWrapper}>
+            <Ionicons name="person" size={54} color="#aaa" />
+          </View>
+          <Text style={styles.guestText}>Misafir Kullanıcı</Text>
 
-        <TouchableOpacity style={styles.primaryButton} onPress={() => navigation.navigate('SignUp')} activeOpacity={0.8}>
-          <Text style={styles.primaryButtonText}>Üye Ol</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.secondaryButton} onPress={() => navigation.navigate('Login')} activeOpacity={0.8}>
-          <Text style={styles.secondaryButtonText}>Giriş Yap</Text>
-        </TouchableOpacity>
-
-        <View style={styles.socialRow}>
-          <TouchableOpacity style={styles.socialIcon} activeOpacity={0.7}>
-            <Ionicons name="logo-google" size={20} color="#666" />
+          <TouchableOpacity style={styles.primaryButton} onPress={() => navigation.navigate('SignUp')} activeOpacity={0.8}>
+            <Text style={styles.primaryButtonText}>Üye Ol</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.socialIcon} activeOpacity={0.7}>
-            <Ionicons name="logo-apple" size={20} color="#666" />
+
+          <TouchableOpacity style={styles.secondaryButton} onPress={() => navigation.navigate('Login')} activeOpacity={0.8}>
+            <Text style={styles.secondaryButtonText}>Giriş Yap</Text>
+          </TouchableOpacity>
+
+          <View style={styles.socialRow}>
+            <TouchableOpacity style={styles.socialIcon} activeOpacity={0.7}>
+              <Ionicons name="logo-google" size={20} color="#666" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.socialIcon} activeOpacity={0.7}>
+              <Ionicons name="logo-apple" size={20} color="#666" />
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity style={styles.contactButton} activeOpacity={0.7} onPress={() => navigation.navigate('ContactSupport')}>
+            <Ionicons name="help-circle-outline" size={16} color="#444" />
+            <Text style={styles.contactButtonText}>İletişim & Destek</Text>
           </TouchableOpacity>
         </View>
-
-        <TouchableOpacity style={styles.contactButton} activeOpacity={0.7} onPress={() => navigation.navigate('ContactSupport')}>
-          <Ionicons name="help-circle-outline" size={16} color="#444" />
-          <Text style={styles.contactButtonText}>İletişim & Destek</Text>
-        </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     )
   }
 
@@ -98,39 +105,43 @@ export default function AccountScreen() {
   ]
 
   return (
-    <ScrollView 
-      style={styles.baseContainer} 
-      contentContainerStyle={styles.memberContent}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.avatarWrapper}>
-        <Ionicons name="person" size={54} color="#aaa" />
-      </View>
-      <Text style={styles.memberName}>{profile.full_name || 'İsim Soyisim'}</Text>
-      {profile.username && <Text style={styles.memberUsername}>@{profile.username}</Text>}
+    <SafeAreaView style={styles.safeArea}>
+      <ScreenHeader title="Hesabım" />
+      <ScrollView 
+        style={styles.baseContainer} 
+        contentContainerStyle={styles.memberContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.avatarWrapper}>
+          <Ionicons name="person" size={54} color="#aaa" />
+        </View>
+        <Text style={styles.memberName}>{profile.full_name || 'İsim Soyisim'}</Text>
+        {profile.username && <Text style={styles.memberUsername}>@{profile.username}</Text>}
 
-      <View style={styles.menuList}>
-        {menuItems.map((item) => (
-        <TouchableOpacity
-            key={item.label}
-            style={styles.menuItem}
-            onPress={() => item.screen && navigation.navigate(item.screen)}
-            activeOpacity={0.7}
-        >
-            <Ionicons name={item.icon as any} size={18} color="#444" />
-            <Text style={styles.menuItemText}>{item.label}</Text>
+        <View style={styles.menuList}>
+          {menuItems.map((item) => (
+          <TouchableOpacity
+              key={item.label}
+              style={styles.menuItem}
+              onPress={() => item.screen && navigation.navigate(item.screen)}
+              activeOpacity={0.7}
+          >
+              <Ionicons name={item.icon as any} size={18} color="#444" />
+              <Text style={styles.menuItemText}>{item.label}</Text>
+          </TouchableOpacity>
+          ))}
+        </View>
+
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout} activeOpacity={0.8}>
+          <Text style={styles.logoutText}>Çıkış Yap</Text>
         </TouchableOpacity>
-        ))}
-      </View>
-
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout} activeOpacity={0.8}>
-        <Text style={styles.logoutText}>Çıkış Yap</Text>
-      </TouchableOpacity>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
+  safeArea: { flex: 1, backgroundColor: '#fff', paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
   baseContainer: { flex: 1, backgroundColor: '#fff' },
   guestContainer: { flex: 1, backgroundColor: '#fff', alignItems: 'center', paddingTop: 24 },
   memberContent: { alignItems: 'center', paddingTop: 24, paddingBottom: 40 },

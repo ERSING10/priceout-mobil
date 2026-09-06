@@ -28,30 +28,17 @@ const CartStack = createNativeStackNavigator()
 function addSharedScreens(Stack: any) {
   return (
     <>
-      <Stack.Screen name="ProductDetail" component={ProductDetailScreen} options={{ title: '' }} />
+      <Stack.Screen name="ProductDetail" component={ProductDetailScreen} options={{ headerShown: false }} />
       <Stack.Screen name="ProductWebView" component={ProductWebViewScreen} options={{ title: '' }} />
       <Stack.Screen name="Search" component={SearchScreen} options={{ title: 'Ürün Ara' }} />
-      <Stack.Screen name="Account" component={AccountScreen} options={{ title: 'Hesabım' }} />
-      <Stack.Screen name="SignUp" component={SignUpScreen} options={{ title: 'Üye Ol' }} />
-      <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Giriş Yap' }} />
-      <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ title: 'Şifre Değiştir' }} />
-      <Stack.Screen name="PersonalInfo" component={PersonalInfoScreen} options={{ title: 'Kişisel Bilgilerim' }} />
-      <Stack.Screen name="ChangeEmail" component={ChangeEmailScreen} options={{ title: 'E-Posta Değiştir' }} />
-      <Stack.Screen name="ContactSupport" component={ContactSupportScreen} options={{ title: 'İletişim & Destek' }} />
+      <Stack.Screen name="Account" component={AccountScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="PersonalInfo" component={PersonalInfoScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ChangeEmail" component={ChangeEmailScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ContactSupport" component={ContactSupportScreen} options={{ headerShown: false }} />
     </>
-  )
-}
-
-function HeaderIcons({ navigation }: any) {
-  return (
-    <View style={{ flexDirection: 'row', gap: 16, marginRight: 8 }}>
-      <TouchableOpacity onPress={() => navigation.navigate('Account')}>
-        <Ionicons name="person-circle-outline" size={26} color="#1a1625" />
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Ionicons name="notifications-outline" size={24} color="#1a1625" />
-      </TouchableOpacity>
-    </View>
   )
 }
 
@@ -67,10 +54,7 @@ function HomeStackNavigator() {
       <HomeStack.Screen
         name="HomeMain"
         component={HomeScreen}
-        options={({ navigation }) => ({
-          title: 'Yeni Ürünler',
-          headerRight: () => <HeaderIcons navigation={navigation} />,
-        })}
+        options={{ headerShown: false }}
       />
       {addSharedScreens(HomeStack)}
     </HomeStack.Navigator>
@@ -95,7 +79,7 @@ function BrandsStackNavigator() {
         headerStyle: { backgroundColor: '#fff' },
       }}
     >
-      <BrandsStack.Screen name="BrandsList" component={BrandsListScreen} options={{ title: 'Markalar' }} />
+      <BrandsStack.Screen name="BrandsList" component={BrandsListScreen} options={{ headerShown: false }} />
       <BrandsStack.Screen name="BrandProducts" component={BrandProductsScreen} options={{ title: '' }} />
       {addSharedScreens(BrandsStack)}
     </BrandsStack.Navigator>
@@ -111,7 +95,7 @@ function CartStackNavigator() {
         headerStyle: { backgroundColor: '#fff' },
       }}
     >
-      <CartStack.Screen name="CartMain" component={CartScreen} options={{ title: 'Sepetim' }} />
+      <CartStack.Screen name="CartMain" component={CartScreen} options={{ headerShown: false }} />
       {addSharedScreens(CartStack)}
     </CartStack.Navigator>
   )
@@ -126,7 +110,7 @@ export default function AppNavigator() {
           component={HomeStackNavigator}
           options={{
             headerShown: false,
-            title: 'Yeni Ürünler',
+            title: 'Yeni',
             tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" size={size} color={color} />,
           }}
         />
@@ -144,7 +128,7 @@ export default function AppNavigator() {
           component={BrandsStackNavigator}
           options={{
             headerShown: false,
-            title: 'Markalar',
+            title: 'Mağazalar',
             tabBarIcon: ({ color, size }) => <Ionicons name="pricetags-outline" size={size} color={color} />,
           }}
         />
@@ -153,7 +137,7 @@ export default function AppNavigator() {
           component={CartStackNavigator}
           options={{
             headerShown: false,
-            title: 'Sepetim',
+            title: 'Favorilerim',
             tabBarIcon: ({ color, size }) => <Ionicons name="cart-outline" size={size} color={color} />,
           }}
         />

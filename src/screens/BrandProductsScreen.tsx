@@ -9,7 +9,7 @@ import EmptyState from '../components/EmptyState'
 
 export default function BrandProductsScreen() {
   const route = useRoute<any>()
-  const { brandId } = route.params
+  const { brandId, brandName } = route.params
 
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
@@ -63,7 +63,7 @@ export default function BrandProductsScreen() {
       ) : (
         <ScrollView contentContainerStyle={styles.list}>
           {displayedProducts.map((product) => (
-            <BrandProductRow key={product.id} product={product} />
+            <BrandProductRow key={product.id} product={product} brandName={brandName} />
           ))}
         </ScrollView>
       )}

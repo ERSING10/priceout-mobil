@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { View, FlatList, ActivityIndicator, StyleSheet, Text, TouchableOpacity, SafeAreaView, Platform, StatusBar } from 'react-native'
+import { View, FlatList, ActivityIndicator, StyleSheet, Text, TouchableOpacity, SafeAreaView, Platform, StatusBar, Image } from 'react-native'
 import { supabase } from '../lib/supabase'
 import { Product, Brand } from '../types/product'
 import DiscoverCard from '../components/DiscoverCard'
@@ -73,7 +73,11 @@ export default function DiscoverScreen() {
       <View style={styles.container}>
         
         <View style={styles.header}>
-          <Text style={styles.logoText}>yüzde<Text style={{ color: GREEN_COLOR, fontSize: 32 }}>50</Text></Text>
+          <Image
+            source={require('../../assets/logo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
         </View>
 
         <View style={styles.filterWrapper}>
@@ -141,12 +145,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 6,
   },
-  logoText: { 
-    fontSize: 22, 
-    fontWeight: '800', 
-    color: '#000',
-    includeFontPadding: false,
-    textAlignVertical: 'center'
+  logo: {
+    width: 112,
+    height: 40,
   },
 
   filterWrapper: {

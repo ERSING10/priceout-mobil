@@ -23,7 +23,7 @@ export default function ProductCard({ product, cardWidth, fromCart, brandName }:
   return (
     <TouchableOpacity
       style={[styles.card, { width: cardWidth }]}
-      onPress={() => navigation.navigate('ProductDetail', { product, fromCart })}
+      onPress={() => navigation.navigate('ProductDetail', { product, fromCart, brandName })}
       activeOpacity={0.85}
     >
       <View style={styles.imageWrapper}>

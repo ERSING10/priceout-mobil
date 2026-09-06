@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, SafeAreaView, Platform, StatusBar } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 import { supabase } from '../lib/supabase'
+import ScreenHeader from '../components/ScreenHeader'
 
 export default function ChangePasswordScreen() {
   const navigation = useNavigation<any>()
@@ -59,42 +60,45 @@ export default function ChangePasswordScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        value={currentPassword}
-        onChangeText={setCurrentPassword}
-        placeholder="Mevcut Şifre"
-        placeholderTextColor="#999"
-        secureTextEntry
-      />
-      <TextInput
-        style={styles.input}
-        value={newPassword}
-        onChangeText={setNewPassword}
-        placeholder="Yeni Şifre"
-        placeholderTextColor="#999"
-        secureTextEntry
-      />
-      <TextInput
-        style={styles.input}
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        placeholder="Yeni Şifre Tekrar"
-        placeholderTextColor="#999"
-        secureTextEntry
-      />
+    <SafeAreaView style={styles.safeArea}>
+      <ScreenHeader title="Şifre Değiştir" />
+      <View style={styles.container}>
+        <TextInput
+          style={styles.input}
+          value={currentPassword}
+          onChangeText={setCurrentPassword}
+          placeholder="Mevcut Şifre"
+          placeholderTextColor="#999"
+          secureTextEntry
+        />
+        <TextInput
+          style={styles.input}
+          value={newPassword}
+          onChangeText={setNewPassword}
+          placeholder="Yeni Şifre"
+          placeholderTextColor="#999"
+          secureTextEntry
+        />
+        <TextInput
+          style={styles.input}
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          placeholder="Yeni Şifre Tekrar"
+          placeholderTextColor="#999"
+          secureTextEntry
+        />
 
-      <View style={styles.rulesBox}>
-        <RuleRow ok={hasMinLength} text="En az 6 karakter içermelidir." />
-        <RuleRow ok={hasLetter} text="En az 1 harf içermelidir." />
-        <RuleRow ok={hasNumber} text="En az 1 rakam içermelidir." />
+        <View style={styles.rulesBox}>
+          <RuleRow ok={hasMinLength} text="En az 6 karakter içermelidir." />
+          <RuleRow ok={hasLetter} text="En az 1 harf içermelidir." />
+          <RuleRow ok={hasNumber} text="En az 1 rakam içermelidir." />
+        </View>
+
+        <TouchableOpacity style={styles.button} onPress={handleChangePassword} disabled={loading}>
+          <Text style={styles.buttonText}>{loading ? 'Kaydediliyor...' : 'Kaydet'}</Text>
+        </TouchableOpacity>
       </View>
-
-      <TouchableOpacity style={styles.button} onPress={handleChangePassword} disabled={loading}>
-        <Text style={styles.buttonText}>{loading ? 'Kaydediliyor...' : 'Kaydet'}</Text>
-      </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -108,7 +112,8 @@ function RuleRow({ ok, text }: { ok: boolean; text: string }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', padding: 20, paddingTop: 30 },
+  safeArea: { flex: 1, backgroundColor: '#fff', paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
+  container: { flex: 1, backgroundColor: '#fff', padding: 20, paddingTop: 10 },
   input: { backgroundColor: '#f5f5f5', borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12, fontSize: 14, marginBottom: 10, color: '#111' },
 
   rulesBox: { marginTop: 8, gap: 4 },

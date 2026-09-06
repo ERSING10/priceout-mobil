@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, SafeAreaView, Platform, StatusBar } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { supabase } from '../lib/supabase'
+import ScreenHeader from '../components/ScreenHeader'
 
 export default function ChangeEmailScreen() {
   const navigation = useNavigation<any>()
@@ -56,42 +57,46 @@ export default function ChangeEmailScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Mevcut E-Posta</Text>
-      <View style={styles.readOnlyInput}>
-        <Text style={styles.readOnlyText}>{currentEmail}</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <ScreenHeader title="E-Posta Değişikliği" />
+      <View style={styles.container}>
+        <Text style={styles.label}>Mevcut E-Posta</Text>
+        <View style={styles.readOnlyInput}>
+          <Text style={styles.readOnlyText}>{currentEmail}</Text>
+        </View>
+
+        <Text style={styles.label}>Yeni E-Posta</Text>
+        <TextInput
+          style={styles.input}
+          value={newEmail}
+          onChangeText={setNewEmail}
+          placeholder="yeni@mail.com"
+          placeholderTextColor="#999"
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
+
+        <Text style={styles.label}>Şifre</Text>
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Şifreni doğrula"
+          placeholderTextColor="#999"
+          secureTextEntry
+        />
+
+        <TouchableOpacity style={styles.button} onPress={handleChangeEmail} disabled={loading}>
+          <Text style={styles.buttonText}>{loading ? 'Kaydediliyor...' : 'Kaydet'}</Text>
+        </TouchableOpacity>
       </View>
-
-      <Text style={styles.label}>Yeni E-Posta</Text>
-      <TextInput
-        style={styles.input}
-        value={newEmail}
-        onChangeText={setNewEmail}
-        placeholder="yeni@mail.com"
-        placeholderTextColor="#999"
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-
-      <Text style={styles.label}>Şifre</Text>
-      <TextInput
-        style={styles.input}
-        value={password}
-        onChangeText={setPassword}
-        placeholder="Şifreni doğrula"
-        placeholderTextColor="#999"
-        secureTextEntry
-      />
-
-      <TouchableOpacity style={styles.button} onPress={handleChangeEmail} disabled={loading}>
-        <Text style={styles.buttonText}>{loading ? 'Kaydediliyor...' : 'Kaydet'}</Text>
-      </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', padding: 20, paddingTop: 30 },
+  safeArea: { flex: 1, backgroundColor: '#fff', paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
+  container: { flex: 1, backgroundColor: '#fff', padding: 20, paddingTop: 10 },
   label: { fontSize: 12, fontWeight: '600', color: '#888', marginBottom: 4, marginTop: 10 },
   input: { backgroundColor: '#f5f5f5', borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12, fontSize: 14, color: '#111' },
   readOnlyInput: { backgroundColor: '#eee', borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12 },

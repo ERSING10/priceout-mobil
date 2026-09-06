@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert, SafeAreaView, Platform, StatusBar } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 import { supabase } from '../lib/supabase'
+import ScreenHeader from '../components/ScreenHeader'
 
 export default function SignUpScreen() {
   const navigation = useNavigation<any>()
@@ -74,40 +75,43 @@ export default function SignUpScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <TextInput style={styles.input} value={firstName} onChangeText={setFirstName} placeholder="Ad" placeholderTextColor="#999" />
-      <TextInput style={styles.input} value={lastName} onChangeText={setLastName} placeholder="Soyad" placeholderTextColor="#999" />
-      <TextInput style={styles.input} value={username} onChangeText={setUsername} placeholder="@username" placeholderTextColor="#999" autoCapitalize="none" />
-      <TextInput style={styles.input} value={phone} onChangeText={setPhone} placeholder="+90 000 000 00 00" placeholderTextColor="#999" keyboardType="phone-pad" />
-      <TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder="xxxx@xxx.com" placeholderTextColor="#999" autoCapitalize="none" keyboardType="email-address" />
-      <TextInput style={styles.input} value={password} onChangeText={setPassword} placeholder="Şifre" placeholderTextColor="#999" secureTextEntry />
-      <CheckboxRow
-        checked={acceptTerms}
-        onPress={() => setAcceptTerms(!acceptTerms)}
-        text="Üyelik Sözleşmesi koşullarını kabul ediyorum."
-        required
-      />
-      <CheckboxRow
-        checked={acceptKvkk}
-        onPress={() => setAcceptKvkk(!acceptKvkk)}
-        text="KVKK Aydınlatma Metni kapsamında kişisel verilerimin işlenmesini onaylıyorum."
-        required
-      />
-      <CheckboxRow
-        checked={acceptEmailCampaign}
-        onPress={() => setAcceptEmailCampaign(!acceptEmailCampaign)}
-        text="Kampanya ve indirimlerle ilgili E-Posta bildirimleri almayı kabul ediyorum."
-      />
-      <CheckboxRow
-        checked={acceptSmsCampaign}
-        onPress={() => setAcceptSmsCampaign(!acceptSmsCampaign)}
-        text="Kampanya ve indirimlerle ilgili SMS bildirimleri almayı kabul ediyorum."
-      />
+    <SafeAreaView style={styles.safeArea}>
+      <ScreenHeader title="Üye Ol" />
+      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+        <TextInput style={styles.input} value={firstName} onChangeText={setFirstName} placeholder="Ad" placeholderTextColor="#999" />
+        <TextInput style={styles.input} value={lastName} onChangeText={setLastName} placeholder="Soyad" placeholderTextColor="#999" />
+        <TextInput style={styles.input} value={username} onChangeText={setUsername} placeholder="@username" placeholderTextColor="#999" autoCapitalize="none" />
+        <TextInput style={styles.input} value={phone} onChangeText={setPhone} placeholder="+90 000 000 00 00" placeholderTextColor="#999" keyboardType="phone-pad" />
+        <TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder="xxxx@xxx.com" placeholderTextColor="#999" autoCapitalize="none" keyboardType="email-address" />
+        <TextInput style={styles.input} value={password} onChangeText={setPassword} placeholder="Şifre" placeholderTextColor="#999" secureTextEntry />
+        <CheckboxRow
+          checked={acceptTerms}
+          onPress={() => setAcceptTerms(!acceptTerms)}
+          text="Üyelik Sözleşmesi koşullarını kabul ediyorum."
+          required
+        />
+        <CheckboxRow
+          checked={acceptKvkk}
+          onPress={() => setAcceptKvkk(!acceptKvkk)}
+          text="KVKK Aydınlatma Metni kapsamında kişisel verilerimin işlenmesini onaylıyorum."
+          required
+        />
+        <CheckboxRow
+          checked={acceptEmailCampaign}
+          onPress={() => setAcceptEmailCampaign(!acceptEmailCampaign)}
+          text="Kampanya ve indirimlerle ilgili E-Posta bildirimleri almayı kabul ediyorum."
+        />
+        <CheckboxRow
+          checked={acceptSmsCampaign}
+          onPress={() => setAcceptSmsCampaign(!acceptSmsCampaign)}
+          text="Kampanya ve indirimlerle ilgili SMS bildirimleri almayı kabul ediyorum."
+        />
 
-      <TouchableOpacity style={styles.button} onPress={handleSignUp} disabled={loading}>
-        <Text style={styles.buttonText}>{loading ? 'Kaydediliyor...' : 'Üye Ol'}</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity style={styles.button} onPress={handleSignUp} disabled={loading}>
+          <Text style={styles.buttonText}>{loading ? 'Kaydediliyor...' : 'Üye Ol'}</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 
@@ -124,8 +128,9 @@ function CheckboxRow({ checked, onPress, text, required }: { checked: boolean; o
 }
 
 const styles = StyleSheet.create({
+  safeArea: { flex: 1, backgroundColor: '#fff', paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
   container: { flex: 1, backgroundColor: '#fff' },
-  content: { padding: 20 },
+  content: { padding: 20, paddingTop: 10 },
   input: { backgroundColor: '#f5f5f5', borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12, fontSize: 14, marginBottom: 10, color: '#111' },
 
   checkboxRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, marginBottom: 10, marginTop: 4 },

@@ -4,15 +4,16 @@ import { Product } from '../types/product'
 
 type Props = {
   product: Product
+  brandName: string
 }
 
-export default function BrandProductRow({ product }: Props) {
+export default function BrandProductRow({ product, brandName }: Props) {
   const navigation = useNavigation<any>()
 
   return (
     <Pressable
       style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
-      onPress={() => navigation.navigate('ProductDetail', { product })}
+      onPress={() => navigation.navigate('ProductDetail', { product, brandName })}
     >
       {product.image_url ? (
         <Image source={{ uri: product.image_url }} style={styles.image} />

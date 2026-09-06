@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, SafeAreaView, Platform, StatusBar } from 'react-native'
 import { supabase } from '../lib/supabase'
+import ScreenHeader from '../components/ScreenHeader'
 
 export default function ContactSupportScreen() {
   const [message, setMessage] = useState('')
@@ -13,6 +14,7 @@ export default function ContactSupportScreen() {
     }
 
     setLoading(true)
+
     const { data: { user } } = await supabase.auth.getUser()
 
     const { error } = await supabase.from('support_messages').insert({
@@ -33,29 +35,33 @@ export default function ContactSupportScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.description}>Bir sorunun mu var, önerin mi var? Bize yaz, sana yardımcı olalım.</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <ScreenHeader title="İletişim & Destek" />
+      <View style={styles.container}>
+        <Text style={styles.description}>Bir sorunun mu var, önerin mi var? Bize yaz, sana yardımcı olalım.</Text>
 
-      <TextInput
-        style={styles.textArea}
-        value={message}
-        onChangeText={setMessage}
-        placeholder="Mesajını buraya yaz..."
-        placeholderTextColor="#999"
-        multiline
-        numberOfLines={6}
-        textAlignVertical="top"
-      />
+        <TextInput
+          style={styles.textArea}
+          value={message}
+          onChangeText={setMessage}
+          placeholder="Mesajını buraya yaz..."
+          placeholderTextColor="#999"
+          multiline
+          numberOfLines={6}
+          textAlignVertical="top"
+        />
 
-      <TouchableOpacity style={styles.button} onPress={handleSend} disabled={loading}>
-        <Text style={styles.buttonText}>{loading ? 'Gönderiliyor...' : 'Gönder'}</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity style={styles.button} onPress={handleSend} disabled={loading}>
+          <Text style={styles.buttonText}>{loading ? 'Gönderiliyor...' : 'Gönder'}</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', padding: 20, paddingTop: 30 },
+  safeArea: { flex: 1, backgroundColor: '#fff', paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
+  container: { flex: 1, backgroundColor: '#fff', padding: 20, paddingTop: 10 },
   description: { fontSize: 13, color: '#666', marginBottom: 16, lineHeight: 19 },
   textArea: { backgroundColor: '#f5f5f5', borderRadius: 10, padding: 14, fontSize: 14, color: '#111', minHeight: 140 },
 

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityIndicator, SafeAreaView, Platform, StatusBar } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 import { supabase } from '../lib/supabase'
+import ScreenHeader from '../components/ScreenHeader'
 
 export default function PersonalInfoScreen() {
   const navigation = useNavigation<any>()
@@ -94,49 +95,56 @@ export default function PersonalInfoScreen() {
 
   if (loading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" />
-      </View>
+      <SafeAreaView style={styles.safeArea}>
+        <ScreenHeader title="Kişisel Bilgilerim" />
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" />
+        </View>
+      </SafeAreaView>
     )
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <View style={styles.avatarWrapper}>
-        <Ionicons name="person" size={54} color="#aaa" />
-        <View style={styles.editBadge}>
-          <Ionicons name="checkmark" size={12} color="#fff" />
+    <SafeAreaView style={styles.safeArea}>
+      <ScreenHeader title="Kişisel Bilgilerim" />
+      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+        <View style={styles.avatarWrapper}>
+          <Ionicons name="person" size={54} color="#aaa" />
+          <View style={styles.editBadge}>
+            <Ionicons name="checkmark" size={12} color="#fff" />
+          </View>
         </View>
-      </View>
 
-      <Text style={styles.label}>Kullanıcı Adı</Text>
-      <TextInput style={styles.input} value={username} onChangeText={setUsername} placeholder="@username" placeholderTextColor="#999" autoCapitalize="none" />
+        <Text style={styles.label}>Kullanıcı Adı</Text>
+        <TextInput style={styles.input} value={username} onChangeText={setUsername} placeholder="@username" placeholderTextColor="#999" autoCapitalize="none" />
 
-      <Text style={styles.label}>Ad</Text>
-      <TextInput style={styles.input} value={firstName} onChangeText={setFirstName} placeholder="Ad" placeholderTextColor="#999" />
+        <Text style={styles.label}>Ad</Text>
+        <TextInput style={styles.input} value={firstName} onChangeText={setFirstName} placeholder="Ad" placeholderTextColor="#999" />
 
-      <Text style={styles.label}>Soyad</Text>
-      <TextInput style={styles.input} value={lastName} onChangeText={setLastName} placeholder="Soyad" placeholderTextColor="#999" />
+        <Text style={styles.label}>Soyad</Text>
+        <TextInput style={styles.input} value={lastName} onChangeText={setLastName} placeholder="Soyad" placeholderTextColor="#999" />
 
-      <Text style={styles.label}>Telefon Numarası</Text>
-      <TextInput style={styles.input} value={phone} onChangeText={setPhone} placeholder="+90 000 000 00 00" placeholderTextColor="#999" keyboardType="phone-pad" />
+        <Text style={styles.label}>Telefon Numarası</Text>
+        <TextInput style={styles.input} value={phone} onChangeText={setPhone} placeholder="+90 000 000 00 00" placeholderTextColor="#999" keyboardType="phone-pad" />
 
-      <Text style={styles.consentText}>E-posta izni: Kampanya, indirim ve yeni ürün duyurularının e-posta adresime gönderilmesini onaylıyorum.</Text>
-      <Text style={styles.consentText}>SMS izni: Fırsatlar ve özel tekliflerle ilgili SMS bildirimlerini almayı kabul ediyorum.</Text>
+        <Text style={styles.consentText}>E-posta izni: Kampanya, indirim ve yeni ürün duyurularının e-posta adresime gönderilmesini onaylıyorum.</Text>
+        <Text style={styles.consentText}>SMS izni: Fırsatlar ve özel tekliflerle ilgili SMS bildirimlerini almayı kabul ediyorum.</Text>
 
-      <TouchableOpacity style={styles.saveButton} onPress={handleSave} disabled={saving}>
-        <Text style={styles.saveButtonText}>{saving ? 'Kaydediliyor...' : 'Kaydet'}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.saveButton} onPress={handleSave} disabled={saving}>
+          <Text style={styles.saveButtonText}>{saving ? 'Kaydediliyor...' : 'Kaydet'}</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteAccount}>
-        <Ionicons name="trash-outline" size={16} color="#dc2626" />
-        <Text style={styles.deleteButtonText}>Hesabımı Sil</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteAccount}>
+          <Ionicons name="trash-outline" size={16} color="#dc2626" />
+          <Text style={styles.deleteButtonText}>Hesabımı Sil</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
+  safeArea: { flex: 1, backgroundColor: '#fff', paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 },
   container: { flex: 1, backgroundColor: '#fff' },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   content: { padding: 20, alignItems: 'center' },
