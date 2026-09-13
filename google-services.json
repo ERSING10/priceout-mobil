@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "562326747171",
+    "project_id": "yuzde50-50412",
+    "storage_bucket": "yuzde50-50412.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562326747171:android:5b2526e04b4f4bc88f1996",
+        "android_client_info": {
+          "package_name": "com.yuzde50.yuzde50"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5TgY-OcH_rBWn1nm7OY9JhfcrxftybyE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -10,6 +10,7 @@ export type Product = {
   affiliate_link: string
   image_url: string | null
   is_featured: boolean
+  is_outlet: boolean
   size: number
   gender: 'unisex' | 'erkek' | 'kadin' | 'cocuk'
   stock_count: number | null

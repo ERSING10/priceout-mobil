@@ -81,10 +81,12 @@ export default function HomeScreen() {
 
         {selectedCategory === '' ? (
           <SplitCategoryGrid
-            shoes={allProducts.filter((p) => p.category === 'Ayakkabı')}
-            clothes={allProducts.filter((p) => p.category === 'Giyim')}
+            shoes={allProducts.filter((p) => p.category === 'Ayakkabı' && p.is_featured)}
+            clothes={allProducts.filter((p) => p.category === 'Giyim' && p.is_featured)}
             brands={brands}
           />
+        ) : selectedCategory === 'Outlet' ? (
+          <ProductList products={allProducts.filter((p) => p.is_outlet)} brands={brands} />
         ) : (
           <ProductList products={allProducts.filter((p) => p.category === selectedCategory)} brands={brands} />
         )}

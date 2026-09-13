@@ -36,6 +36,8 @@ export default function BrandProductsScreen() {
 
   const displayedProducts = selectedCategory === ''
     ? products
+    : selectedCategory === 'Outlet'
+    ? products.filter((p) => p.is_outlet)
     : products.filter((p) => p.category === selectedCategory)
 
   if (loading) {
