@@ -2,6 +2,7 @@ import * as Notifications from 'expo-notifications'
 import * as Device from 'expo-device'
 import Constants from 'expo-constants'
 import { Platform } from 'react-native'
+import { supabase } from './supabase'
 
 export async function registerForPushNotificationsAsync(): Promise<string | null> {
   if (!Device.isDevice) {
@@ -37,4 +38,19 @@ export async function registerForPushNotificationsAsync(): Promise<string | null
 
   const tokenData = await Notifications.getExpoPushTokenAsync({ projectId })
   return tokenData.data
+}
+
+export async function savePushToken(token: string) {
+  const { data: { session } } = await supabase.auth.getSession()
+
+  const { error } = await supabase.rpc('register_push_token', {
+    p_device_token: token,
+    p_user_id: session?.user.id ?? null,
+  })
+
+  if (error) {
+    console.log('Token kaydedilemedi:', error.message)
+  } else {
+    console.log('Token kaydedildi/güncellendi')
+  }
 }
